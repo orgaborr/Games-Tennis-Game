@@ -12,7 +12,9 @@
             var canvas;
             var canvasContext;
             var ballX = 50;
-            var ballSpeedX = 5;
+            var ballY = 50;
+            var ballSpeedX = 10;
+            var ballSpeedY = 4;
             
             window.onload = function() {
                 
@@ -29,8 +31,14 @@
             
             function moveEverything() {
                 ballX = ballX + ballSpeedX;
+                ballY = ballY + ballSpeedY;
+                
                 if(ballX > canvas.width || ballX < 0) {
                     ballSpeedX = -ballSpeedX;
+                }
+                
+                if(ballY > canvas.height || ballY < 0) {
+                    ballSpeedY = -ballSpeedY;
                 }
             }
             
@@ -42,7 +50,7 @@
                 colorRect(0,canvas.height/2-50,10,100,'white');
                 
                 // draws the ball
-                colorCircle(ballX, 150, 10,'white');
+                colorCircle(ballX, ballY, 10,'white');
             }
             
             function colorCircle(centerX, centerY, radius, drawColor) {
