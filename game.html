@@ -43,6 +43,7 @@
                 drawEverything();
                 }, 1000/framesPerSecond);
                 
+                // moves paddle
                 canvas.addEventListener('mousemove',
                                        function(evt) {
                                         var mousePos = calculateMousePos(evt);
@@ -51,14 +52,28 @@
             }
             
             function ballReset() {
+                ballSpeedX = -ballSpeedX;
                 ballX = canvas.width/2;
                 ballY = canvas.height/2;
             }
             
             
+            // AI
+            function computerMovement() {
+                var paddle2YCenter = paddle2Y + (PADDLE_HEIGHT/2);
+                if(paddle2YCenter < ballY - 35) { //-35 says it's close enough, less shaky
+                    paddle2Y += 6;
+                } else {
+                    paddle2Y -= 6;
+                }
+            }
+            
+            
             function moveEverything() {
-                ballX = ballX + ballSpeedX;
-                ballY = ballY + ballSpeedY;
+                computerMovement();
+                
+                ballX += ballSpeedX;
+                ballY += ballSpeedY;
                 
                 if(ballX < 0) {
                     if(ballY > paddle1Y &&
@@ -70,7 +85,12 @@
                 }
                 
                 if(ballX > canvas.width) {
-                    ballSpeedX = -ballSpeedX;
+                    if(ballY > paddle2Y &&
+                      ballY < paddle2Y + PADDLE_HEIGHT) {
+                        ballSpeedX = -ballSpeedX;
+                    } else {
+                        ballReset();
+                    }
                 }
                 
                 if(ballY < 0) {
@@ -94,6 +114,8 @@
                 
                 // draws the ball
                 colorCircle(ballX, ballY, 10,'white');
+                
+                canvasContext.fillText("Score stuff", 100, 100);
             }
             
             function colorCircle(centerX, centerY, radius, drawColor) {
